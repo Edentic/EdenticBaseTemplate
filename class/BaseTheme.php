@@ -11,6 +11,7 @@ class BaseTheme
     protected $styles = array();
     protected $sideBars = array();
     protected $menus = array();
+    protected $bootStrap = false;
 
     public function __construct() {
         $this->addAction('wp_enqueue_scripts', 'hookUpScripts');
@@ -148,5 +149,14 @@ class BaseTheme
 
     public function hookUpMenus() {
         register_nav_menus($this->menus);
+    }
+
+    /**
+     * Enable bootstrap on theme
+     */
+    public function enableBootStrap() {
+        $this->bootStrap = true;
+        $this->addStyle('bootstrap', '/css/bootstrap.min.css');
+        $this->addScript('bootstrap', '/js/bootstrap.min.js');
     }
 }
