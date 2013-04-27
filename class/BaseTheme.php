@@ -12,6 +12,7 @@ class BaseTheme
     protected $sideBars = array();
     protected $menus = array();
     protected $bootStrap = false;
+    protected $cleanUpHead = true;
 
     public function __construct() {
         $this->addAction('wp_enqueue_scripts', 'hookUpScripts');
@@ -25,6 +26,19 @@ class BaseTheme
      * Initialize hooks
      */
     private function initialize() {
+        //Cleanup the head
+        if($this->cleanUpHead) {
+            remove_action('wp_head', 'rsd_link');
+            remove_action('wp_head', 'wp_generator');
+            remove_action('wp_head', 'feed_links', 2);
+            remove_action('wp_head', 'index_rel_link');
+            remove_action('wp_head', 'wlwmanifest_link');
+            remove_action('wp_head', 'feed_links_extra', 3);
+            remove_action('wp_head', 'start_post_rel_link', 10, 0);
+            remove_action('wp_head', 'parent_post_rel_link', 10, 0);
+            remove_action('wp_head', 'adjacent_posts_rel_link', 10, 0);
+        }
+
         //Hook up actions
         foreach($this->hookUps as $hook) {
             add_action($hook[0], array($this, $hook[1]));
