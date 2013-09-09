@@ -173,4 +173,17 @@ class BaseTheme
         $this->addStyle('bootstrap', '/css/bootstrap.min.css');
         $this->addScript('bootstrap', '/js/bootstrap.min.js');
     }
+
+    /**
+     * Removes hAtom entry
+     * @param $classes
+     * @return mixed
+     */
+    public function removeHAtomEntry($classes) {
+        $keys = array_keys($classes, 'hentry');
+        foreach($keys as $key) {
+            $classes[$key] = "contentEntry";
+        }
+        return $classes;
+    }
 }
