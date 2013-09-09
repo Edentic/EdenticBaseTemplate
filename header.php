@@ -26,6 +26,26 @@
     <!-- W3TC-include-js-head -->
 
     <?php wp_head(); ?>
+    <!-- Google Analytics -->
+    <script>
+        jQuery(document).on('cookillian_ready', function() { //COOKILLIAN READY EVENT
+            if(typeof cookillian != "undefined"  && cookillian.blocked_cookies == false) {
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+
+                ga('create', 'XX-XXXXXXXX-X'); //GOOGLE ANALYTICS ID
+                ga('send', 'pageview');
+            }
+        });
+    </script>
+    <!-- End Google Analytics -->
+
+    <!--[if lt IE 9]>
+        <link href="<?php echo get_template_directory_uri(); ?>/stylesheets/no-mq.css" rel="stylesheet"/>
+    <![endif]-->
 </head>
 
 <body <?php body_class(); ?>>
