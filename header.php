@@ -14,16 +14,22 @@
     <meta charset="<?php bloginfo( 'charset' ); ?>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <title><?php wp_title( '|', true, 'right' ); ?></title>
-    <link rel="profile" href="http://gmpg.org/xfn/11" />
-    <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
+
+    <!-- FaveIcon -->
+    <link rel="icon" type="image/png" href="<?php echo get_template_directory_uri(); ?>/assets/favicon.png">
+
     <!--[if lt IE 9]>
     <script src="<?php echo get_template_directory_uri(); ?>/js/html5.js" type="text/javascript"></script>
     <![endif]-->
+
+    <!-- W3TC-include-css -->
+    <!-- W3TC-include-js-head -->
 
     <?php wp_head(); ?>
 </head>
 
 <body <?php body_class(); ?>>
+<!-- W3TC-include-js-body-start -->
 <div id="page" class="site">
 	<?php do_action( 'before' ); ?>
 	<header id="masthead" class="site-header" role="banner">
