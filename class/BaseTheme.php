@@ -7,6 +7,7 @@
 class BaseTheme
 {
     protected $hookUps = array();
+    protected $filters = array();
     protected $scripts = array();
     protected $styles = array();
     protected $sideBars = array();
@@ -19,6 +20,7 @@ class BaseTheme
         $this->addAction('wp_enqueue_scripts', 'hookUpStyles');
         $this->addAction('widgets_init', 'hookUpSidebars');
         $this->addAction('after_setup_theme', 'hookUpMenus');
+        $this->addFilter('post_class', 'removeHAtomEntry');
         $this->initialize();
     }
 
@@ -43,6 +45,11 @@ class BaseTheme
         foreach($this->hookUps as $hook) {
             add_action($hook[0], array($this, $hook[1]));
         }
+
+        //Hook up filters
+        foreach($this->filters as $filter) {
+            add_filter($filter[0], array($this, $filter[1]));
+        }
     }
 
     /**
@@ -61,6 +68,21 @@ class BaseTheme
             $this->hookUps[] = array($hook, $action);
         }
 
+        return true;
+    }
+
+    /**
+     * Add filter to theme method
+     * @param $filter
+     * @param $action
+     * @return bool
+     * @throws Exception
+     */
+    protected function addFilter($filter, $action) {
+        if(!is_string($filter)) throw new Exception('Filter has to be string!');
+        if(!is_string($action)) throw new Exception('Action has to be string');
+
+        $this->filters[] = array($filter, $action);
         return true;
     }
 
