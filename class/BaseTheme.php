@@ -218,4 +218,22 @@ class BaseTheme
         }
         return $classes;
     }
+
+    /**
+     * Returns all posts in a given menu
+     * @param string $menuName
+     * @return array
+     */
+    public function getMenuList($menuName = '') {
+        $output = array();
+        if(!is_nav_menu($menuName)) return $output;
+
+        $list = wp_get_nav_menu_items($menuName);
+        if(count($list) <= 0) return $output;
+        foreach($list as $item) {
+            $output[] = get_post($item->object_id);
+        }
+
+        return $output;
+    }
 }
