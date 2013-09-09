@@ -13,10 +13,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="<?php bloginfo( 'charset' ); ?>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no">
     <title><?php wp_title( '|', true, 'right' ); ?></title>
 
     <!-- FaveIcon -->
     <link rel="icon" type="image/png" href="<?php echo get_template_directory_uri(); ?>/assets/favicon.png">
+    <link rel="shortcut icon" href="<?php echo get_template_directory_uri(); ?>/assets/favicon.png" type="image/png">
+
+    <link rel="apple-touch-icon" href="<?php echo get_template_directory_uri(); ?>/assets/favicon_apple.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="<?php echo get_template_directory_uri(); ?>/assets/favicon_apple_72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="<?php echo get_template_directory_uri(); ?>/assets/favicon_apple_114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="<?php echo get_template_directory_uri(); ?>/assets/favicon_apple_144x144.png" />
 
     <!--[if lt IE 9]>
     <script src="<?php echo get_template_directory_uri(); ?>/js/html5.js" type="text/javascript"></script>
