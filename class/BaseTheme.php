@@ -236,4 +236,18 @@ class BaseTheme
 
         return $output;
     }
+
+    /**
+     * Inserts responsive image into page
+     * @param $postID
+     */
+    public function loadResponsiveImage($postID) {
+        if(!is_numeric($postID)) return;
+
+        $responsiveFile = get_template_directory(). "/inc/responsive.php";
+
+        if(file_exists($responsiveFile)) {
+            include $responsiveFile;
+        }
+    }
 }
