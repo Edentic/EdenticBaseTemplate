@@ -27,6 +27,7 @@ class BaseTheme
         $this->addAction('widgets_init', 'hookUpSidebars');
         $this->addAction('after_setup_theme', 'hookUpMenus');
         $this->addFilter('post_class', 'removeHAtomEntry');
+        $this->initBaseFiles();
         $this->initialize();
     }
 
@@ -56,6 +57,13 @@ class BaseTheme
         foreach($this->filters as $filter) {
             add_filter($filter[0], array($this, $filter[1]));
         }
+    }
+
+    /**
+     * Initialize base files
+     */
+    protected function initBaseFiles() {
+        $this->addScript('pictureFill', '/js/jquery-picture-min.js', array('jquery'), '', true);
     }
 
     /**

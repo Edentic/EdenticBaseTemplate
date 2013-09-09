@@ -23,6 +23,9 @@
 
 <!-- W3TC-include-js-body-end -->
 <?php wp_footer(); ?>
+<script type="text/javascript">
+    jQuery('.responsive').picture();
+</script>
 
 </body>
 </html>
