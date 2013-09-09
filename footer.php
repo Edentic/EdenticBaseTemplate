@@ -21,6 +21,7 @@
 	</footer><!-- #colophon .site-footer -->
 </div><!-- #page .hfeed .site -->
 
+<!-- W3TC-include-js-body-end -->
 <?php wp_footer(); ?>
 
 </body>

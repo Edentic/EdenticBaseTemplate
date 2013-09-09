@@ -10,19 +10,53 @@
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
-<meta charset="<?php bloginfo( 'charset' ); ?>" />
-<meta name="viewport" content="width=device-width" />
-<title><?php wp_title( '|', true, 'right' ); ?></title>
-<link rel="profile" href="http://gmpg.org/xfn/11" />
-<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
-<!--[if lt IE 9]>
-<script src="<?php echo get_template_directory_uri(); ?>/js/html5.js" type="text/javascript"></script>
-<![endif]-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="<?php bloginfo( 'charset' ); ?>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no">
+    <title><?php wp_title( '|', true, 'right' ); ?></title>
 
-<?php wp_head(); ?>
+    <!-- FaveIcon -->
+    <link rel="icon" type="image/png" href="<?php echo get_template_directory_uri(); ?>/assets/favicon.png">
+    <link rel="shortcut icon" href="<?php echo get_template_directory_uri(); ?>/assets/favicon.png" type="image/png">
+
+    <link rel="apple-touch-icon" href="<?php echo get_template_directory_uri(); ?>/assets/favicon_apple.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="<?php echo get_template_directory_uri(); ?>/assets/favicon_apple_72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="<?php echo get_template_directory_uri(); ?>/assets/favicon_apple_114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="<?php echo get_template_directory_uri(); ?>/assets/favicon_apple_144x144.png" />
+
+    <!--[if lt IE 9]>
+    <script src="<?php echo get_template_directory_uri(); ?>/js/html5.js" type="text/javascript"></script>
+    <![endif]-->
+
+    <!-- W3TC-include-css -->
+    <!-- W3TC-include-js-head -->
+
+    <?php wp_head(); ?>
+    <!-- Google Analytics -->
+    <script>
+        jQuery(document).on('cookillian_ready', function() { //COOKILLIAN READY EVENT
+            if(typeof cookillian != "undefined"  && cookillian.blocked_cookies == false) {
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+
+                ga('create', 'XX-XXXXXXXX-X'); //GOOGLE ANALYTICS ID
+                ga('send', 'pageview');
+            }
+        });
+    </script>
+    <!-- End Google Analytics -->
+
+    <!--[if lt IE 9]>
+        <link href="<?php echo get_template_directory_uri(); ?>/stylesheets/no-mq.css" rel="stylesheet"/>
+    <![endif]-->
 </head>
 
 <body <?php body_class(); ?>>
+<!-- W3TC-include-js-body-start -->
 <div id="page" class="site">
 	<?php do_action( 'before' ); ?>
 	<header id="masthead" class="site-header" role="banner">
