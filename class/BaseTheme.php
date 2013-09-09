@@ -15,6 +15,12 @@ class BaseTheme
     protected $bootStrap = false;
     protected $cleanUpHead = true;
 
+    /**
+     * Sets if hAtom tags should be removed
+     * @var bool
+     */
+    protected $removeHAtomTags = true;
+
     public function __construct() {
         $this->addAction('wp_enqueue_scripts', 'hookUpScripts');
         $this->addAction('wp_enqueue_scripts', 'hookUpStyles');
@@ -202,6 +208,10 @@ class BaseTheme
      * @return mixed
      */
     public function removeHAtomEntry($classes) {
+        if($this->removeHAtomTags === false) {
+            return $classes;
+        }
+
         $keys = array_keys($classes, 'hentry');
         foreach($keys as $key) {
             $classes[$key] = "contentEntry";
