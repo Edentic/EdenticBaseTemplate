@@ -64,6 +64,7 @@ class BaseTheme
      */
     protected function initBaseFiles() {
         $this->addScript('pictureFill', '/js/jquery-picture-min.js', array('jquery'), '', true);
+        $this->addStyle('main', '/stylesheets/main.css');
     }
 
     /**
