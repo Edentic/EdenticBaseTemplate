@@ -10,11 +10,11 @@
 ?>
 
 <article id="post-0" class="post no-results not-found">
-	<header class="entry-header">
-		<h1 class="entry-title"><?php _e( 'Nothing Found', '_s' ); ?></h1>
+	<header>
+		<h1><?php _e( 'Nothing Found', '_s' ); ?></h1>
 	</header><!-- .entry-header -->
 
-	<div class="entry-content">
+	<div>
 		<?php if ( is_home() && current_user_can( 'publish_posts' ) ) : ?>
 
 			<p><?php printf( __( 'Ready to publish your first post? <a href="%1$s">Get started here</a>.', '_s' ), esc_url( admin_url( 'post-new.php' ) ) ); ?></p>
