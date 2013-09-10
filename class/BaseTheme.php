@@ -7,18 +7,29 @@
 class BaseTheme
 {
     protected $hookUps = array();
+    protected $filters = array();
     protected $scripts = array();
     protected $styles = array();
     protected $sideBars = array();
     protected $menus = array();
+    protected $customPostTypes = array();
     protected $bootStrap = false;
     protected $cleanUpHead = true;
+
+    /**
+     * Sets if hAtom tags should be removed
+     * @var bool
+     */
+    protected $removeHAtomTags = true;
 
     public function __construct() {
         $this->addAction('wp_enqueue_scripts', 'hookUpScripts');
         $this->addAction('wp_enqueue_scripts', 'hookUpStyles');
         $this->addAction('widgets_init', 'hookUpSidebars');
         $this->addAction('after_setup_theme', 'hookUpMenus');
+        $this->addFilter('post_class', 'removeHAtomEntry');
+        $this->registerPostTypes();
+        $this->initBaseFiles();
         $this->initialize();
     }
 
@@ -43,6 +54,20 @@ class BaseTheme
         foreach($this->hookUps as $hook) {
             add_action($hook[0], array($this, $hook[1]));
         }
+
+        //Hook up filters
+        foreach($this->filters as $filter) {
+            add_filter($filter[0], array($this, $filter[1]));
+        }
+    }
+
+    /**
+     * Initialize base files
+     */
+    protected function initBaseFiles() {
+        $this->addScript('modernizr', '/js/modernizr-2.6.2.min.js');
+        $this->addScript('pictureFill', '/js/jquery-picture-min.js', array('jquery'), '', true);
+        $this->addStyle('main', '/stylesheets/main.css');
     }
 
     /**
@@ -61,6 +86,21 @@ class BaseTheme
             $this->hookUps[] = array($hook, $action);
         }
 
+        return true;
+    }
+
+    /**
+     * Add filter to theme method
+     * @param $filter
+     * @param $action
+     * @return bool
+     * @throws Exception
+     */
+    protected function addFilter($filter, $action) {
+        if(!is_string($filter)) throw new Exception('Filter has to be string!');
+        if(!is_string($action)) throw new Exception('Action has to be string');
+
+        $this->filters[] = array($filter, $action);
         return true;
     }
 
@@ -139,6 +179,52 @@ class BaseTheme
     }
 
     /**
+     * Registers a new custom post type
+     * @param $name
+     * @param array $labels
+     * @param array $args
+     * @throws Exception
+     */
+    public function registerPostType($name, $labels = array(), $args = array()) {
+        if(!is_string($name)) throw new Exception('Name should be given as string!');
+
+        $defaultLabels = array(
+            'name' => $name,
+            'singular_name' => $name,
+            'add_new' => 'Add New',
+            'add_new_item' => 'Add New '. $name,
+            'edit_item' => 'Edit '. $name,
+            'new_item' => 'New '. $name,
+            'all_items' => 'All '. $name,
+            'view_item' => 'View '. $name,
+            'search_items' => 'Search '. $name,
+            'not_found' =>  'No '. $name. ' found',
+            'not_found_in_trash' => 'No '. $name. ' found in Trash',
+            'parent_item_colon' => '',
+            'menu_name' => $name
+        );
+
+        $labels = array_merge($defaultLabels, $labels);
+
+        $defaultOptions = array(
+            'labels' => $labels,
+            'public' => true,
+            'publicly_queryable' => false,
+            'show_ui' => true,
+            'show_in_menu' => true,
+            'query_var' => true,
+            'rewrite' => array( 'slug' => $name ),
+            'capability_type' => 'post',
+            'has_archive' => false,
+            'hierarchical' => false,
+            'supports' => array( 'title', 'editor')
+        );
+
+        $args = array_merge($defaultOptions, $args);
+        $this->customPostTypes[] = array($name, $args);
+    }
+
+    /**
      * Hooks up script
      */
     public function hookUpScripts() {
@@ -152,6 +238,16 @@ class BaseTheme
         foreach($this->styles as $style) {
              if(!filter_var($style[1], FILTER_VALIDATE_URL)) $style[1] = get_template_directory_uri(). $style[1];
              wp_enqueue_style($style[0], $style[1], $style[2], $style[3], $style[4]);
+        }
+    }
+
+    /**
+     * Registers custom post types for project
+     */
+    public function registerPostTypes() {
+        foreach($this->customPostTypes as $postType) {
+            if(!is_string($postType[0]) || !is_array($postType[1])) continue;
+            register_post_type($postType[0], $postType[1]);
         }
     }
 
@@ -172,5 +268,54 @@ class BaseTheme
         $this->bootStrap = true;
         $this->addStyle('bootstrap', '/css/bootstrap.min.css');
         $this->addScript('bootstrap', '/js/bootstrap.min.js');
+    }
+
+    /**
+     * Removes hAtom entry
+     * @param $classes
+     * @return mixed
+     */
+    public function removeHAtomEntry($classes) {
+        if($this->removeHAtomTags === false) {
+            return $classes;
+        }
+
+        $keys = array_keys($classes, 'hentry');
+        foreach($keys as $key) {
+            $classes[$key] = "contentEntry";
+        }
+        return $classes;
+    }
+
+    /**
+     * Returns all posts in a given menu
+     * @param string $menuName
+     * @return array
+     */
+    public function getMenuList($menuName = '') {
+        $output = array();
+        if(!is_nav_menu($menuName)) return $output;
+
+        $list = wp_get_nav_menu_items($menuName);
+        if(count($list) <= 0) return $output;
+        foreach($list as $item) {
+            $output[] = get_post($item->object_id);
+        }
+
+        return $output;
+    }
+
+    /**
+     * Inserts responsive image into page
+     * @param $postID
+     */
+    public function loadResponsiveImage($postID) {
+        if(!is_numeric($postID)) return;
+
+        $responsiveFile = get_template_directory(). "/inc/responsive.php";
+
+        if(file_exists($responsiveFile)) {
+            include $responsiveFile;
+        }
     }
 }
