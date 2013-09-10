@@ -12,6 +12,7 @@ class BaseTheme
     protected $styles = array();
     protected $sideBars = array();
     protected $menus = array();
+    protected $customPostTypes = array();
     protected $bootStrap = false;
     protected $cleanUpHead = true;
 
@@ -27,6 +28,7 @@ class BaseTheme
         $this->addAction('widgets_init', 'hookUpSidebars');
         $this->addAction('after_setup_theme', 'hookUpMenus');
         $this->addFilter('post_class', 'removeHAtomEntry');
+        $this->registerPostTypes();
         $this->initBaseFiles();
         $this->initialize();
     }
@@ -177,6 +179,52 @@ class BaseTheme
     }
 
     /**
+     * Registers a new custom post type
+     * @param $name
+     * @param array $labels
+     * @param array $args
+     * @throws Exception
+     */
+    public function registerPostType($name, $labels = array(), $args = array()) {
+        if(!is_string($name)) throw new Exception('Name should be given as string!');
+
+        $defaultLabels = array(
+            'name' => $name,
+            'singular_name' => $name,
+            'add_new' => 'Add New',
+            'add_new_item' => 'Add New '. $name,
+            'edit_item' => 'Edit '. $name,
+            'new_item' => 'New '. $name,
+            'all_items' => 'All '. $name,
+            'view_item' => 'View '. $name,
+            'search_items' => 'Search '. $name,
+            'not_found' =>  'No '. $name. ' found',
+            'not_found_in_trash' => 'No '. $name. ' found in Trash',
+            'parent_item_colon' => '',
+            'menu_name' => $name
+        );
+
+        $labels = array_merge($defaultLabels, $labels);
+
+        $defaultOptions = array(
+            'labels' => $labels,
+            'public' => true,
+            'publicly_queryable' => false,
+            'show_ui' => true,
+            'show_in_menu' => true,
+            'query_var' => true,
+            'rewrite' => array( 'slug' => $name ),
+            'capability_type' => 'post',
+            'has_archive' => false,
+            'hierarchical' => false,
+            'supports' => array( 'title', 'editor')
+        );
+
+        $args = array_merge($defaultOptions, $args);
+        $this->customPostTypes[] = array($name, $args);
+    }
+
+    /**
      * Hooks up script
      */
     public function hookUpScripts() {
@@ -190,6 +238,16 @@ class BaseTheme
         foreach($this->styles as $style) {
              if(!filter_var($style[1], FILTER_VALIDATE_URL)) $style[1] = get_template_directory_uri(). $style[1];
              wp_enqueue_style($style[0], $style[1], $style[2], $style[3], $style[4]);
+        }
+    }
+
+    /**
+     * Registers custom post types for project
+     */
+    public function registerPostTypes() {
+        foreach($this->customPostTypes as $postType) {
+            if(!is_string($postType[0]) || !is_array($postType[1])) continue;
+            register_post_type($postType[0], $postType[1]);
         }
     }
 
